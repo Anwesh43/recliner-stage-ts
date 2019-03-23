@@ -25,6 +25,36 @@ const updateValue : Function = (scale : number, dir : number, a : number, b : nu
     return mirrorValue(scale, a, b) * dir * scGap
 }
 
+const drawLARNode : Function = (context : CanvasRenderingContext2D, i : number, scale : number) => {
+    const gap : number = h / (nodes + 1)
+    const size : number = gap / sizeFactor
+    context.lineCap = 'round'
+    context.lineWidth = Math.min(w, h) / strokeFactor
+    context.strokeStyle = foreColor
+    const sc1 : number = divideScale(scale, 0, 2)
+    const sc2 : number = divideScale(scale, 1, 2)
+    context.save()
+    context.translate(w / 2, gap * (i + 1))
+    context.rotate(Math.PI/2 * sc2)
+    for (var j = 0; j < lines; j++) {
+        const y : number = (size / 2) * (1 - 2 * j)
+        const sc : number = divideScale(sc1, j, lines)
+        context.save()
+        context.translate(0, y)
+        for (var k = 0; k < 2; k++) {
+            context.save()
+            context.rotate(2 * Math.PI / 3 * sc * k)
+            context.beginPath()
+            context.moveTo(0, 0)
+            context.lineTo(0, -y)
+            context.stroke()
+            context.restore()
+        }
+        context.restore()
+    }
+    context.restore()
+}
+
 class LineAngleRotStage {
 
     canvas : HTMLCanvasElement = document.createElement('canvas')
