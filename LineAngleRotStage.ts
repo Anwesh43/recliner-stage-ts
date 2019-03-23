@@ -198,3 +198,25 @@ class LineAngleRot {
         this.curr.startUpdating(cb)
     }
 }
+
+class Renderer {
+
+    lar : LineAngleRot = new LineAngleRot()
+    animator : Animator = new Animator()
+
+    render(context : CanvasRenderingContext2D) {
+        this.lar.draw(context)
+    }
+
+    handleTap(cb : Function) {
+        this.lar.startUpdating(() => {
+            this.animator.start(() => {
+                cb()
+                this.lar.update(() => {
+                    cb()
+                    this.animator.stop()
+                })
+            })
+        })
+    }
+}
